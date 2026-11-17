@@ -11,7 +11,18 @@ animals = {
 
 @animal_blueprint.route('/animals', methods=['GET'])
 def get_animals():
-    return jsonify(list(animals.values()))
+    habitat = request.args.get('habitat')
+
+    animal_list = list(animals.values())
+
+    if habitat:
+        animal_list = [
+            animal for animal in animal_list
+            if animal['habitat'].lower() == habitat.lower()
+        ]
+
+    return jsonify(animal_list)
+
 
 
 @animal_blueprint.route('/animals/<string:animal_name>', methods=['GET'])
